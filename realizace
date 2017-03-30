@@ -1,1 +1,30 @@
+if bookmarks = null {
+
 touch bookmarks
+echo "id | name | url | opens" >> bookmarks
+}
+
+	print "choose option"
+	print 
+	1. add bookmark
+.
+.
+.
+.
+"
+x=scanf(%о%х", &i,&j)
+case x=1{
+	printlf "Add name of bookmark"
+	name=scanf()
+	printf "Add url"
+	url=scanf()
+	id=findid+1;
+	echo "id | name | ur"
+}
+
+
+
+методы
+1.ID 
+сделать так, что бы каждый новый ряд начинался с числа на 1 больше предыдущего
+2. найти 
