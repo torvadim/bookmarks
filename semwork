@@ -3,22 +3,27 @@ Zadani: Databaze zalozek s moznostemi:
 pridani,
 smazani, 
 vyhledavani,
-rezeni podle nazvu nebo popularity.
+rezeni podle nazvu nebo popularity
+a samozrejme otevreni v prohlizeci.
 
 
 Zpusob realizaci:
 
-Vytovreni souboru, v prvnim sloupcu bude vegenerovano unikalni jmeno zalozky ktere bude vygenerovano z prvnich trech souhlasek z nazvu. 
+Prvni sloupec bude obshaovat ID zalozky.
 
-Druhy radek bude obsahovat nazev, ktery uvadi user pred predanim do databazi. 
+Druhy sloupec bude obsahovat nazev, ktery uvadi user pred predanim do databazi. 
 
-Treti radek bude obsahovat url zalozky.
+Treti sloupec bude obsahovat url zalozky.
 
-Ctverty bude mit scitac pouziti. 
+Ctverty sloupec bude mit scitac pouziti. 
 
 Rozdeleni mezi sloupcemi bude realizovano pomoci znaku "|".
 
-Vyhledavani bude realizovano pomoci prikazem "find".
-Pridani bude 
 
-# bookmarks
+
+Vytvorit vchodny pro to textovy soubor.
+Napsat skript pomoci ktereho budeme ovladat databazi. 
+Pak postupne pridat do skriptu moznosti pridani, mazani, vyhledavani, razeni, import z html souboru. 
+Vytvorit scitac otevirani zalozky. 
+Pridat kontrolu databazi. Jestli byla smazana nebo premistena vytvorit novou. 
+Vytvorit skript pro import html souboru.
