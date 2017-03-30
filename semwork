@@ -1,0 +1,23 @@
+Semestralni prace:
+Zadani: Databaze zalozek s moznostemi: 
+pridani,
+smazani, 
+vyhledavani,
+rezeni podle nazvu nebo popularity.
+
+
+Zpusob realizaci:
+
+Vytovreni souboru, v prvnim sloupcu bude vegenerovano unikalni jmeno zalozky ktere bude vygenerovano z prvnich trech souhlasek z nazvu. 
+
+Druhy radek bude obsahovat nazev, ktery uvadi user pred predanim do databazi. 
+
+Treti radek bude obsahovat url zalozky.
+
+Ctverty bude mit scitac pouziti. 
+
+Rozdeleni mezi sloupcemi bude realizovano pomoci znaku "|".
+
+Vyhledavani bude realizovano pomoci prikazem "find".
+Pridani bude 
+
