@@ -3,22 +3,28 @@
 
 
 bookmarksMenu =$(
-
-echo "Choose what do you want to do:"
-options=("Create a new bookmark" "Delete bookmark" "Sort bookmarks by name" "Sort bookmarks by popularity" "Import bookmark" "Quit")
-select opt in "${options[@]}"
+echo "Choose what do you want to do: "
+declare -a options2=(
+"Create a new bookmark"
+"Delete bookmark"
+"Sort bookmarks by name"
+"Sort bookmarks by popularity"
+"Import bookmark"
+"Quit")
+#options2=("a" "b" "c");
+select opt1 in "${options2[@]}"
 do
-case $opt in 
+case $opt1 in 
 "Create a new bookmark")
 				$CreateBookmark
 				break
 				;;
 "Delete bookmark")
-				$Delete bookmark
+				$DeleteBookmark
 				break
 				;;
 "Sort bookmarks by name")
-				$SortBookmarkByName
+				$SortBookmarkByNameoptions
 				break
 				;;
 "Sort bookmarks by popularity")
@@ -38,6 +44,19 @@ done
 )
 
 
+
+CreateBookmark = $(
+echo -n "Please enter Name of bookmark"
+read name
+echo -n "Please enter url of bookmark"
+read url
+id= $((nl bookmarks)-1)
+opens = 0;
+echo -n "$id | $name | $url | $opens" >> bookmarks
+echo "Bookmark was added!"
+bookmarksMenu
+)
+
 if  test -f bookmarks; 
 then $bookmarksMenu
 else echo "File does not exist! Please control directory. Do you want to change directory or create a new database?"; 
@@ -50,6 +69,9 @@ select opt in "${options1[@]}"
 				break
 				;;
 			"Create")
+				cd
+				touch dir bookmarksdir
+				cd bookmarksdir 
 				touch bookmarks
 				echo "id | name | url | opens" >> bookmarks
 				bookmarksMenu
