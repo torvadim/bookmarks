@@ -1,64 +1,80 @@
 
 #!/bin/bash
 
+function CreateBookmark {
+echo "Please enter Name of bookmark: "
+read name
+	if [ -z "$name" ] :
+		then echo "You need to add name!"
+		CreateBookmark
+	fi
+echo  "Please enter url of bookmark: "
+read url
+	if [ -z "$url" ] :
+		then echo "You need to add url!"
+		CreateBookmark
+	fi
+id=$(nl bookmarks);
+opens=0
+echo $id  >> bookmarks
+echo "Bookmark was added!"
+bookmarksMenu
+}
 
-bookmarksMenu =$(
+function bookmarksMenu {
 echo "Choose what do you want to do: "
-declare -a options2=(
+options2=(
 "Create a new bookmark"
 "Delete bookmark"
 "Sort bookmarks by name"
 "Sort bookmarks by popularity"
 "Import bookmark"
-"Quit")
-#options2=("a" "b" "c");
+"Quit"
+);
+
 select opt1 in "${options2[@]}"
-do
-case $opt1 in 
-"Create a new bookmark")
-				$CreateBookmark
+	do
+		case $opt1 in 
+			"Create a new bookmark")
+				CreateBookmark
 				break
 				;;
-"Delete bookmark")
+			"Delete bookmark")
 				$DeleteBookmark
 				break
 				;;
-"Sort bookmarks by name")
+			"Sort bookmarks by name")
 				$SortBookmarkByNameoptions
 				break
 				;;
-"Sort bookmarks by popularity")
+			"Sort bookmarks by popularity")
 				$SortBookmarkByPop
 				break
 				;;
-"Import bookmark")
+			"Import bookmark")
 				$ImportBookmark
 				break
 				;;
-"Quit")
-				break
+			"Quit")
+				exit
 				;;
-*)
-esac
-done
-)
+			*) 
+			echo invalid operation
+			break
+			;;
+
+		esac
+	done
+}
 
 
 
-CreateBookmark = $(
-echo -n "Please enter Name of bookmark"
-read name
-echo -n "Please enter url of bookmark"
-read url
-id= $((nl bookmarks)-1)
-opens = 0;
-echo -n "$id | $name | $url | $opens" >> bookmarks
-echo "Bookmark was added!"
-bookmarksMenu
-)
+
+
+
 
 if  test -f bookmarks; 
-then $bookmarksMenu
+then bookmarksMenu
 else echo "File does not exist! Please control directory. Do you want to change directory or create a new database?"; 
 options1=("Change" "Create" "Quit"); 
 select opt in "${options1[@]}"
@@ -69,16 +85,14 @@ select opt in "${options1[@]}"
 				break
 				;;
 			"Create")
-				cd
-				touch dir bookmarksdir
-				cd bookmarksdir 
+				
 				touch bookmarks
 				echo "id | name | url | opens" >> bookmarks
-				bookmarksMenu
+				$bookmarksMenu
 				break
 				;;
 			"Quit")
-				break
+				exit
 				;;
 			*) echo invalid option;;
 		esac;
@@ -88,7 +102,6 @@ fi
 # bookmarks menu
 
 
-CreateBookmark = $(
+function CreateBookmark {
 echo "Not ready yet"
-break
-)
+}
