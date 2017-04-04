@@ -26,14 +26,35 @@ bookmarksMenu
 
 ## DELETE BOOKMARK
 
+function AnotherDeleting {
+echo "Do you want to delete other bookmark?"
+options3=("Delete" "Exit") 
+select opt2 in "${options3[@]}"
+	do
+		case $opt2 in
+			"Delete")
+			DeleteBookmark
+			;;
+			"Exit")
+			bookmarksMenu
+			;;
+		esac
+	done
+}
+
+
 function DeleteBookmark {
 
 echo "This is your list of bookmarks: "
 cat bookmarks
 echo "Type id of bookmark you want to delete"
 read idDeleted;
-cat bookmarks | grep -v "$idDeleted"
+#cat bookmarks | grep -v "$idDeleted"
+sed -i "/$idDeleted/d" bookmarks
+AnotherDeleting
+
 }
+
 
 
 
