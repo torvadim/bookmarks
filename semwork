@@ -9,21 +9,20 @@ a samozrejme otevreni v prohlizeci.
 
 Zpusob realizaci:
 
-Prvni sloupec bude obshaovat ID zalozky.
+Prvni sloupec bude obshaovat ID zalozky. (*)
 
-Druhy sloupec bude obsahovat nazev, ktery uvadi user pred predanim do databazi. 
+Druhy sloupec bude obsahovat nazev, ktery uvadi user pred predanim do databazi. (*)
 
-Treti sloupec bude obsahovat url zalozky.
+Treti sloupec bude obsahovat url zalozky. (*)
 
-Ctverty sloupec bude mit scitac pouziti. 
+Ctverty sloupec bude mit scitac pouziti. (*)
 
-Rozdeleni mezi sloupcemi bude realizovano pomoci znaku "|".
+Rozdeleni mezi sloupcemi bude realizovano pomoci znaku "|". (*)
 
 
 
 Vytvorit vchodny pro to textovy soubor.
-Napsat skript pomoci ktereho budeme ovladat databazi. 
-Pak postupne pridat do skriptu moznosti pridani, mazani, vyhledavani, razeni, import z html souboru. 
-Vytvorit scitac otevirani zalozky. 
-Pridat kontrolu databazi. Jestli byla smazana nebo premistena vytvorit novou. 
-Vytvorit skript pro import html souboru.
+Napsat skript pomoci ktereho budeme ovladat databazi. (*)
+Pak postupne pridat do skriptu moznosti pridani(*), mazani (*), vyhledavani (*), razeni(*), import. 
+Vytvorit scitac otevirani zalozky. (*)
+Pridat kontrolu databazi. Jestli byla smazana nebo premistena vytvorit novou. (*)
