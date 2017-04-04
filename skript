@@ -4,19 +4,21 @@
 function CreateBookmark {
 echo "Please enter Name of bookmark: "
 read name
-	if [ -z "$name" ] :
+	if [ -z "$name" ];
 		then echo "You need to add name!"
 		CreateBookmark
 	fi
 echo  "Please enter url of bookmark: "
 read url
-	if [ -z "$url" ] :
+	if [ -z "$url" ];
 		then echo "You need to add url!"
 		CreateBookmark
 	fi
-id=$(nl bookmarks);
-opens=0
-echo $id  >> bookmarks
+#local id=$(nl bookmarks);
+let lines=$(cat bookmarks | wc -l)
+let id="$lines"
+let opens=0
+echo "$id | $name | $url | $opens " >> bookmarks
 echo "Bookmark was added!"
 bookmarksMenu
 }
