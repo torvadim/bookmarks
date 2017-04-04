@@ -28,3 +28,75 @@ case x=1{
 1.ID 
 сделать так, что бы каждый новый ряд начинался с числа на 1 больше предыдущего
 2. найти 
+
+
+
+
+%% проверка
+
+
+TestBookmark=$(
+
+if  test -f bookmarks; 
+then echo "File does not exist! Please control directory. Do you want to change directory or create a new database?"; 
+options=("Change" "Create" "Quit")
+select opt in "${options[@]}"
+do
+case $opt in
+"Change")
+ls
+break
+;;
+"Create")
+touch bookmarks
+echo "id | name | url | opens" >> bookmarks
+bookmarksMenu
+break
+;;
+"Quit")
+break
+;;
+*) echp invalid option;;
+esac;
+done
+else bookmarksMenu
+	)
+
+%% bookmarks menu
+
+bookmarksMenu =$(
+
+echo "Choose what do you want to do:"
+options=("Create a new bookmark" "Delete bookmark" "Sort bookmarks by name" "Sort bookmarks by popularity" "Import bookmark" "Quit")
+select opt in "@{options[@]}"
+do
+case $opt in 
+"Create a new bookmark")
+CreateBookmark
+break
+;;
+"Delete bookmark")
+Delete bookmark
+break
+;;
+"Sort bookmarks by name")
+SortBookmarkByName
+break
+;;
+"Sort bookmarks by popularity")
+SortBookmarkByPop
+break
+;;
+"Import bookmark")
+ImportBookmark
+break
+;;
+"Quit")
+break
+;;
+*)
+esac
+done
+)
+
+CreateBookmark = $()
