@@ -1,6 +1,7 @@
 
 #!/bin/bash
 
+## CREATING
 function CreateBookmark {
 echo "Please enter Name of bookmark: "
 read name
@@ -23,6 +24,21 @@ echo "Bookmark was added!"
 bookmarksMenu
 }
 
+## DELETE BOOKMARK
+
+function DeleteBookmark {
+
+echo "This is your list of bookmarks: "
+cat bookmarks
+echo "Type id of bookmark you want to delete"
+read idDeleted;
+cat bookmarks | grep -v "$idDeleted"
+}
+
+
+
+## MAIN MENU
+
 function bookmarksMenu {
 echo "Choose what do you want to do: "
 options2=(
@@ -42,7 +58,7 @@ select opt1 in "${options2[@]}"
 				break
 				;;
 			"Delete bookmark")
-				$DeleteBookmark
+				DeleteBookmark
 				break
 				;;
 			"Sort bookmarks by name")
@@ -73,7 +89,7 @@ select opt1 in "${options2[@]}"
 
 
 
-
+## TEST FILES
 
 if  test -f bookmarks; 
 then bookmarksMenu
@@ -101,9 +117,4 @@ select opt in "${options1[@]}"
 	done
 fi 	
 
-# bookmarks menu
 
-
-function CreateBookmark {
-echo "Not ready yet"
-}
