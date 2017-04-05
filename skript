@@ -87,11 +87,12 @@ function OpenUrl {
 	xdg-open "$url"
 
 	
-
-counter="$(awk -v i=$idOpen  'BEGIN{FNqR == i}{$7+=1} END{ print $0}' bookmarks)"
-N=$idOpen
-sed -i "{N}s/.*/${counter}" bookmarks
-(("$(awk -F "|" -v i=$idOpen 'FNR == i { gsub (" ", "", $0); print $4}' bookmarks)"+1)) | sed -i
+awk -F'|' -v i=$idOpen '{if($1 == i) $4=" "$4+1}1' OFS='|' bookmarks > tmp && mv tmp bookmarks
+#
+#counter="$(awk -v i=$idOpen  'BEGIN{FNqR == i}{$7+=1} END{ print $0}' bookmarks)#"
+#N=$idOpe#n
+#sed -i "#{N}s/.*/${counter}" bookmarks
+#(("$(awk -F "|" -v i=$idOpen 'FNR == i { gsub (" ", "", $0); print $4}' bookmarks)"+1)) | sed -i
 #( echo "$counter" | sed 's/}$/\\$(($counter+1))/' ) subbookmarks
 #sed  -i "s/$counter" subbookmarks
 #cut -d. -f$id subbookmarks
@@ -109,7 +110,7 @@ function SortBookmarkByName {
 	echo "This is your list of bookmarks sorted by name: 
 ID | NAME | URL | POP "
 	#(tail -n +2 bookmarks) > subbookmarks
-	cat bookmarks | sort -k3 
+	cat bookmarks | sort -t "|" -k2
 	OpenUrl
 }
 
@@ -119,7 +120,7 @@ function SortBookmarkByPop {
 	echo "This is your list of bookmarks sorted by popularity: 
 ID | NAME | URL | POP "
 	#(tail -n +2 bookmarks) > subbookmarks
-	cat bookmarks | sort -k6 
+	cat bookmarks | sort -r -t "|" -k4 
 	OpenUrl
 }
 
