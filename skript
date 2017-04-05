@@ -1,6 +1,8 @@
 
 #!/bin/bash
 
+
+regex3='^[0-9]+$'
 ## CREATING
 function CreateBookmark {
 echo "Please enter Name of bookmark: "
@@ -61,10 +63,36 @@ select opt2 in "${options3[@]}"
 
 function DeleteBookmark {
 
-echo "This is your list of bookmarks: "
+echo "This is your list of bookmarks: 
+ID | NAME | URL | POP"
 cat bookmarks
-echo "Type id of bookmark you want to delete"
+echo "Type id of bookmark you want to delete or type zero to get back"
 read idDeleted;
+
+## НЕ РАБОТАЕТ БАААГ
+if ! [[ $idDeleted =~ $regex3 ]]
+			then
+				
+				echo "You typed something wrong"
+				bookmarksMenu
+fi
+if [ -z "$idDeleted" ];
+		then echo "You need to type an id or type zero to get back!"
+		bookmarksMenu
+	fi
+	if [ "$idDeleted"="0" ] 
+		then {
+			bookmarksMenu
+		}
+	
+	fi
+	if [ "$idDeleted" \> "$(wc -l < bookmarks)"]
+		then
+		{
+			echo "You entered a wrong id, try again"
+			bookmarksMenu
+		}
+	fi
 #cat bookmarks | grep -v "$idDeleted"
 sed -i "/$idDeleted/d" bookmarks
 AnotherDeleting
@@ -75,8 +103,32 @@ AnotherDeleting
 
 ## OPEN URL
 function OpenUrl {
-	echo "type id of bookmark you want to open: "
+	echo "Type id of bookmark you want to open or type zero to get back: "
 	read idOpen
+	## НЕ РАБОТАЕТ БАААГ
+	if ! [[ $idOpen =~ $regex3 ]]
+			then
+				echo "You typed something wrong"
+				bookmarksMenu
+	fi
+	if [ -z "$idOpen" ];
+		then echo "You need to type an id or type zero to get back!"
+		bookmarksMenu
+	fi
+	if [ "$idOpen"="0" ] 
+		then {
+			bookmarksMenu
+		}
+	
+	fi
+	NumberOfBookmarks="$(wc -l < bookmarks)"
+	if (( $idOpen > $NumberOfBookmarks ));
+		then
+		{
+			echo "You entered a wrong id, try again"
+			bookmarksMenu
+		}
+	fi
 	#(tail -n +2 bookmarks) > subbookmarks
 	#echo "$id"
 	url="$(awk -F "|" -v i=$idOpen 'FNR == i { gsub (" ", "", $0); print $3}' bookmarks)"
@@ -110,7 +162,8 @@ function SortBookmarkByName {
 	echo "This is your list of bookmarks sorted by name: 
 ID | NAME | URL | POP "
 	#(tail -n +2 bookmarks) > subbookmarks
-	cat bookmarks | sort -t "|" -k2
+	cp bookmarks  tmp
+	cat tmp | sort -t "|" -k2
 	OpenUrl
 }
 
@@ -120,7 +173,8 @@ function SortBookmarkByPop {
 	echo "This is your list of bookmarks sorted by popularity: 
 ID | NAME | URL | POP "
 	#(tail -n +2 bookmarks) > subbookmarks
-	cat bookmarks | sort -r -t "|" -k4 
+	cp  bookmarks  tmp
+	cat tmp | sort -r -t "|" -k4 
 	OpenUrl
 }
 
@@ -181,9 +235,9 @@ select opt1 in "${options2[@]}"
 
 ## TEST FILES
 
-if  test -f bookmarks; 
+if  test -s bookmarks; 
 then bookmarksMenu
-else echo "File does not exist! Please control directory. Do you want to change directory or create a new database?"; 
+else echo "File does not exist or its empty! Please control directory. Do you want to change directory or create a new database?"; 
 options1=("Change" "Create" "Quit"); 
 select opt in "${options1[@]}"
 	do
