@@ -52,7 +52,47 @@ read idDeleted;
 #cat bookmarks | grep -v "$idDeleted"
 sed -i "/$idDeleted/d" bookmarks
 AnotherDeleting
+}
 
+
+## OPEN URL
+function OpenUrl {
+	echo "type id of bookmark you want to open: "
+	read id
+	(tail -n +2 bookmarks) > subbookmarks
+	echo "$id"
+	url="$(awk -v i=$id 'FNR == i {print $5}' subbookmarks)"
+#URL CONTROL
+	regex='^(https?|ftp|file)://[-A-Za-z0-9\+&@#/%?=~_|!:,.;]*[-‌​A-Za-z0-9\+&@#/%=~_|‌​]$'
+	if [[ $url =~ $regex ]]
+		then
+		xdg-open "$url"
+	else
+		url1="http://$url"
+		xdg-open "$url1"
+	fi
+
+}
+	
+
+## SORT BOOKMARKS BY NAME
+
+function SortBookmarkByName {
+	echo "This is your list of bookmarks sorted by name: 
+ID | NAME | URL | POP "
+	(tail -n +2 bookmarks) > subbookmarks
+	cat subbookmarks | sort -k3 
+	OpenUrl
+}
+
+
+
+function SortBookmarkByPop {
+	echo "This is your list of bookmarks sorted by popularity: 
+ID | NAME | URL | POP "
+	(tail -n +2 bookmarks) > subbookmarks
+	cat bookmarks | sort -k6 
+	OpenUrl
 }
 
 
@@ -83,11 +123,11 @@ select opt1 in "${options2[@]}"
 				break
 				;;
 			"Sort bookmarks by name")
-				$SortBookmarkByNameoptions
+				SortBookmarkByName
 				break
 				;;
 			"Sort bookmarks by popularity")
-				$SortBookmarkByPop
+				SortBookmarkByPop
 				break
 				;;
 			"Import bookmark")
