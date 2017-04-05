@@ -11,13 +11,29 @@ read name
 	fi
 echo  "Please enter url of bookmark: "
 read url
+		regex='^(https?|ftp|file)://[-A-Za-z0-9\+&@#/%?=~_|!:,.;]*[-‌​A-Za-z0-9\+&@#/%=~_|‌​]$'
+		if [[ $url =~ $regex ]]
+			then
+				break
+			else
+				regex2='[-A-Za-z0-9\+&@#/%?=~_|!:,.;]*[-‌​A-Za-z0-9\+&@#/%=~_|‌​]$'
+		if [[ $url =~ $regex2 ]]
+			then
+			url="http://$url"
+	else
+		echo "Invalid URL"
+		exit
+	fi
+		fi
+		
 	if [ -z "$url" ];
 		then echo "You need to add url!"
 		CreateBookmark
 	fi
+
 #local id=$(nl bookmarks);
 let lines=$(cat bookmarks | wc -l)
-let id="$lines"
+let id="(($lines+1))"
 let opens=0
 echo "$id | $name | $url | $opens " >> bookmarks
 echo "Bookmark was added!"
@@ -54,25 +70,37 @@ sed -i "/$idDeleted/d" bookmarks
 AnotherDeleting
 }
 
+# counter
+
 
 ## OPEN URL
 function OpenUrl {
 	echo "type id of bookmark you want to open: "
-	read id
-	(tail -n +2 bookmarks) > subbookmarks
-	echo "$id"
-	url="$(awk -v i=$id 'FNR == i {print $5}' subbookmarks)"
+	read idOpen
+	#(tail -n +2 bookmarks) > subbookmarks
+	#echo "$id"
+	url="$(awk -F "|" -v i=$idOpen 'FNR == i { gsub (" ", "", $0); print $3}' bookmarks)"
+	 #echo "1: " | awk -F  "|" '/1/ {print $1}'
+	 #awk -v i=$id 'FNR == i {print $5}' subbookmarks
 #URL CONTROL
-	regex='^(https?|ftp|file)://[-A-Za-z0-9\+&@#/%?=~_|!:,.;]*[-‌​A-Za-z0-9\+&@#/%=~_|‌​]$'
-	if [[ $url =~ $regex ]]
-		then
-		xdg-open "$url"
-	else
-		url1="http://$url"
-		xdg-open "$url1"
-	fi
 
+	xdg-open "$url"
+
+	
+
+counter="$(awk -v i=$idOpen  'BEGIN{FNqR == i}{$7+=1} END{ print $0}' bookmarks)"
+N=$idOpen
+sed -i "{N}s/.*/${counter}" bookmarks
+(("$(awk -F "|" -v i=$idOpen 'FNR == i { gsub (" ", "", $0); print $4}' bookmarks)"+1)) | sed -i
+#( echo "$counter" | sed 's/}$/\\$(($counter+1))/' ) subbookmarks
+#sed  -i "s/$counter" subbookmarks
+#cut -d. -f$id subbookmarks
+#odlnum=`cut -d ',' -s -f7 subbookmarks`
+#newnum=`expr $oldnum + 1`
+#sed -i "s/${$id}/${$counter}/g" subbookmarks
+bookmarksMenu
 }
+
 	
 
 ## SORT BOOKMARKS BY NAME
@@ -80,8 +108,8 @@ function OpenUrl {
 function SortBookmarkByName {
 	echo "This is your list of bookmarks sorted by name: 
 ID | NAME | URL | POP "
-	(tail -n +2 bookmarks) > subbookmarks
-	cat subbookmarks | sort -k3 
+	#(tail -n +2 bookmarks) > subbookmarks
+	cat bookmarks | sort -k3 
 	OpenUrl
 }
 
@@ -90,7 +118,7 @@ ID | NAME | URL | POP "
 function SortBookmarkByPop {
 	echo "This is your list of bookmarks sorted by popularity: 
 ID | NAME | URL | POP "
-	(tail -n +2 bookmarks) > subbookmarks
+	#(tail -n +2 bookmarks) > subbookmarks
 	cat bookmarks | sort -k6 
 	OpenUrl
 }
@@ -166,8 +194,8 @@ select opt in "${options1[@]}"
 			"Create")
 				
 				touch bookmarks
-				echo "id | name | url | opens" >> bookmarks
-				$bookmarksMenu
+				#echo "id | name | url | opens" >> bookmarks
+				bookmarksMenu
 				break
 				;;
 			"Quit")
