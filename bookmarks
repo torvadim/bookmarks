@@ -1,1 +1,3 @@
-id | name | url | opens
+1 | name1 | http://url1 | 2
+2 | name2 | http://url2 | 3
+3 | name3 | http://url3 | 0 
