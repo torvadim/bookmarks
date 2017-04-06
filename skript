@@ -2,7 +2,7 @@
 #!/bin/bash
 
 
-regex3='^[0-9]+$'
+regex3= '^[0-9]+([.][0-9]+)?$'
 ## CREATING
 function CreateBookmark {
 echo "Please enter Name of bookmark: "
@@ -70,18 +70,14 @@ echo "Type id of bookmark you want to delete or type zero to get back"
 read idDeleted;
 
 ## НЕ РАБОТАЕТ БАААГ
-if ! [[ $idDeleted =~ $regex3 ]]
-			then
-				
-				echo "You typed something wrong"
-				bookmarksMenu
-fi
+
 if [ -z "$idDeleted" ];
 		then echo "You need to type an id or type zero to get back!"
 		bookmarksMenu
 	fi
 	if [ "$idDeleted"="0" ] 
 		then {
+			echo "You are going back to menu"
 			bookmarksMenu
 		}
 	
@@ -106,22 +102,21 @@ function OpenUrl {
 	echo "Type id of bookmark you want to open or type zero to get back: "
 	read idOpen
 	## НЕ РАБОТАЕТ БАААГ
-	if ! [[ $idOpen =~ $regex3 ]]
-			then
-				echo "You typed something wrong"
-				bookmarksMenu
-	fi
-	if [ -z "$idOpen" ];
-		then echo "You need to type an id or type zero to get back!"
+
+	if [ -z "$idOpen" ]
+		then 
+		echo "You need to type an id or type zero to get back!"
 		bookmarksMenu
 	fi
-	if [ "$idOpen"="0" ] 
-		then {
+	if   (( "$idOpen"=="0" )) 
+		then 
+		echo "You are  going back to menu"
 			bookmarksMenu
-		}
-	
 	fi
+
+	
 	NumberOfBookmarks="$(wc -l < bookmarks)"
+	
 	if (( $idOpen > $NumberOfBookmarks ));
 		then
 		{
