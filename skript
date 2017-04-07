@@ -2,7 +2,7 @@
 #!/bin/bash
 
 
-regex3= '^[0-9]+([.][0-9]+)?$'
+
 ## CREATING
 function CreateBookmark {
 echo "Please enter Name of bookmark: "
