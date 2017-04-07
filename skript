@@ -5,6 +5,7 @@
 
 ## CREATING
 function CreateBookmark {
+	echo "--------------------------------------------------------------------------"
 echo "Please enter Name of bookmark: "
 read name
 	if [ -z "$name" ];
@@ -38,6 +39,7 @@ let lines=$(cat bookmarks | wc -l)
 let id="(($lines+1))"
 let opens=0
 echo "$id | $name | $url | $opens " >> bookmarks
+echo "--------------------------------------------------------------------------"
 echo "Bookmark was added!"
 bookmarksMenu
 }
@@ -45,6 +47,7 @@ bookmarksMenu
 ## DELETE BOOKMARK
 
 function AnotherDeleting {
+echo "--------------------------------------------------------------------------"
 echo "Do you want to delete other bookmark?"
 options3=("Delete" "Exit") 
 select opt2 in "${options3[@]}"
@@ -62,7 +65,12 @@ select opt2 in "${options3[@]}"
 
 
 function DeleteBookmark {
-
+echo "--------------------------------------------------------------------------"
+		if ! test -s bookmarks;
+	then 
+	echo "You dont have any bookmarks!"
+	bookmarksMenu   
+fi
 echo "This is your list of bookmarks: 
 ID | NAME | URL | POP"
 cat bookmarks
@@ -75,20 +83,20 @@ if [ -z "$idDeleted" ];
 		then echo "You need to type an id or type zero to get back!"
 		bookmarksMenu
 	fi
-	if [ "$idDeleted"="0" ] 
-		then {
-			echo "You are going back to menu"
+if   [ "$idDeleted" -eq "0" ]; 
+		then 
+		echo "You are  going back to menu"
 			bookmarksMenu
-		}
-	
 	fi
-	if [ "$idDeleted" \> "$(wc -l < bookmarks)"]
+
+	if [ "$idDeleted" \> "$(wc -l < bookmarks)" ]
 		then
 		{
 			echo "You entered a wrong id, try again"
 			bookmarksMenu
 		}
 	fi
+
 #cat bookmarks | grep -v "$idDeleted"
 sed -i "/$idDeleted/d" bookmarks
 AnotherDeleting
@@ -99,6 +107,7 @@ AnotherDeleting
 
 ## OPEN URL
 function OpenUrl {
+	echo "--------------------------------------------------------------------------"
 	echo "Type id of bookmark you want to open or type zero to get back: "
 	read idOpen
 	## НЕ РАБОТАЕТ БАААГ
@@ -108,7 +117,7 @@ function OpenUrl {
 		echo "You need to type an id or type zero to get back!"
 		bookmarksMenu
 	fi
-	if   (( "$idOpen"=="0" )) 
+	if  [ "$idOpen" -eq "0" ]
 		then 
 		echo "You are  going back to menu"
 			bookmarksMenu
@@ -154,10 +163,18 @@ bookmarksMenu
 ## SORT BOOKMARKS BY NAME
 
 function SortBookmarkByName {
-	echo "This is your list of bookmarks sorted by name: 
-ID | NAME | URL | POP "
+	echo "--------------------------------------------------------------------------"
+	
 	#(tail -n +2 bookmarks) > subbookmarks
 	cp bookmarks  tmp
+		if ! test -s tmp;
+	then 
+	echo "You dont have any bookmarks!"
+	bookmarksMenu   
+fi
+echo "This is your list of bookmarks sorted by name: 
+ID | NAME | URL | POP "
+
 	cat tmp | sort -t "|" -k2
 	OpenUrl
 }
@@ -165,10 +182,20 @@ ID | NAME | URL | POP "
 
 
 function SortBookmarkByPop {
-	echo "This is your list of bookmarks sorted by popularity: 
-ID | NAME | URL | POP "
+	echo "--------------------------------------------------------------------------"
+
 	#(tail -n +2 bookmarks) > subbookmarks
 	cp  bookmarks  tmp
+
+	if ! test -s tmp;
+	then 
+	echo "You dont have any bookmarks!"
+	bookmarksMenu   
+fi
+
+		echo "This is your list of bookmarks sorted by popularity: 
+ID | NAME | URL | POP "
+
 	cat tmp | sort -r -t "|" -k4 
 	OpenUrl
 }
@@ -179,6 +206,7 @@ ID | NAME | URL | POP "
 ## MAIN MENU
 
 function bookmarksMenu {
+echo "--------------------------------------------------------------------------"
 echo "Choose what do you want to do: "
 options2=(
 "Create a new bookmark"
@@ -216,8 +244,9 @@ select opt1 in "${options2[@]}"
 				exit
 				;;
 			*) 
-			echo invalid operation
-			break
+			echo "You need to choose something!"
+
+			bookmarksMenu
 			;;
 
 		esac
