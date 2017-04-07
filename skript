@@ -69,7 +69,7 @@ cat bookmarks
 echo "Type id of bookmark you want to delete or type zero to get back"
 read idDeleted;
 
-## НЕ РАБОТАЕТ БАААГ
+
 
 if [ -z "$idDeleted" ];
 		then echo "You need to type an id or type zero to get back!"
@@ -238,7 +238,8 @@ select opt in "${options1[@]}"
 	do
 		case $opt in
 			"Change")
-				ls
+				echo "Now you are in : "
+				pwd
 				break
 				;;
 			"Create")
