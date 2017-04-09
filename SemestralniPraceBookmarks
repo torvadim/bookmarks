@@ -1,7 +1,6 @@
 
 #!/bin/bash
-
-
+regex3='[[:digit::]]'
 
 ## CREATING
 function CreateBookmark {
@@ -19,7 +18,7 @@ read url
 			then
 				break
 			else
-				regex2='[-A-Za-z0-9\+&@#/%?=~_|!:,.;]*[-‌​A-Za-z0-9\+&@#/%=~_|‌​]$'
+				regex2='^[-A-Za-z0-9\+&@#/%?=~_|!:,.;]*[-‌​A-Za-z0-9\+&@#/%=~_|‌​]$'
 			
  fi
 		if [[ $url =~ $regex2 ]]
@@ -81,7 +80,11 @@ cat bookmarks
 echo "Type id of bookmark you want to delete or type zero to get back"
 read idDeleted;
 
-
+if ! [[ $idDeleted =~ $regex3 ]]
+			then
+				echo "You typed something, you will be retutrned to menu"
+				bookmarksMenu
+	fi
 
 if [ -z "$idDeleted" ];
 		then echo "You need to type an id or type zero to get back!"
@@ -124,13 +127,18 @@ function OpenUrl {
 		echo "You need to type an id or type zero to get back!"
 		bookmarksMenu
 	fi
-	if  [ "$idOpen" -eq "0" ]
+	
+if ! [[ $idOpen =~ $regex3 ]]
+			then
+				echo "You typed something, you will be retutrned to menu"
+				bookmarksMenu
+	fi
+	
+	if  [[ "$idOpen" -eq "0" ]]
 		then 
 		echo "You are  going back to menu"
 			bookmarksMenu
 	fi
-
-	
 	NumberOfBookmarks="$(wc -l < bookmarks)"
 	
 	if (( $idOpen > $NumberOfBookmarks ));
