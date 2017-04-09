@@ -20,14 +20,16 @@ read url
 				break
 			else
 				regex2='[-A-Za-z0-9\+&@#/%?=~_|!:,.;]*[-‌​A-Za-z0-9\+&@#/%=~_|‌​]$'
+			
+ fi
 		if [[ $url =~ $regex2 ]]
 			then
 			url="http://$url"
-	else
+	else4
 		echo "Invalid URL"
 		exit
 	fi
-		fi
+		
 		
 	if [ -z "$url" ];
 		then echo "You need to add url!"
@@ -35,8 +37,10 @@ read url
 	fi
 
 #local id=$(nl bookmarks);
-let lines=$(cat bookmarks | wc -l)
-let id="(($lines+1))"
+#let lines=$(cat bookmarks | wc -l)
+#let lastline=$(awk 'END { print }' bookmarks)
+let lastid="$(awk 'END { print $1}' bookmarks)"
+id="$(($lastid+1))"
 let opens=0
 echo "$id | $name | $url | $opens " >> bookmarks
 echo "--------------------------------------------------------------------------"
@@ -98,7 +102,11 @@ if   [ "$idDeleted" -eq "0" ];
 	fi
 
 #cat bookmarks | grep -v "$idDeleted"
-sed -i "/$idDeleted/d" bookmarks
+# СДЕЛАТЬ УДАЛЕНИ ПО ID, не по строке
+#awk -F'|' -v i=$idDeleted '{if($1 == i) $4=" "$4+1}1' OFS='|' bookmarks
+StringToDelete="$(awk -F'|' -v i=$idDeleted '{if($1 == i) print $0 }' OFS='|' bookmarks)"
+grep -v "$StringToDelete" bookmarks > tmp2 && mv tmp2 bookmarks
+rm tmp2
 AnotherDeleting
 }
 
