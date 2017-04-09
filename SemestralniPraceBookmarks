@@ -1,0 +1,296 @@
+
+#!/bin/bash
+
+
+
+## CREATING
+function CreateBookmark {
+	echo "--------------------------------------------------------------------------"
+echo "Please enter Name of bookmark: "
+read name
+	if [ -z "$name" ];
+		then echo "You need to add name!"
+		CreateBookmark
+	fi
+echo  "Please enter url of bookmark: "
+read url
+		regex='^(https?|ftp|file)://[-A-Za-z0-9\+&@#/%?=~_|!:,.;]*[-‌​A-Za-z0-9\+&@#/%=~_|‌​]$'
+		if [[ $url =~ $regex ]]
+			then
+				break
+			else
+				regex2='[-A-Za-z0-9\+&@#/%?=~_|!:,.;]*[-‌​A-Za-z0-9\+&@#/%=~_|‌​]$'
+			
+ fi
+		if [[ $url =~ $regex2 ]]
+			then
+			url="http://$url"
+	else
+		echo "Invalid URL"
+		exit
+	fi
+		
+		
+	if [ -z "$url" ];
+		then echo "You need to add url!"
+		CreateBookmark
+	fi
+
+#local id=$(nl bookmarks);
+#let lines=$(cat bookmarks | wc -l)
+#let lastline=$(awk 'END { print }' bookmarks)
+let lastid="$(awk 'END { print $1}' bookmarks)"
+id="$(($lastid+1))"
+let opens=0
+echo "$id | $name | $url | $opens " >> bookmarks
+echo "--------------------------------------------------------------------------"
+echo "Bookmark was added!"
+bookmarksMenu
+}
+
+## DELETE BOOKMARK
+
+function AnotherDeleting {
+echo "--------------------------------------------------------------------------"
+echo "Do you want to delete other bookmark?"
+options3=("Delete" "Exit") 
+select opt2 in "${options3[@]}"
+	do
+		case $opt2 in
+			"Delete")
+			DeleteBookmark
+			;;
+			"Exit")
+			bookmarksMenu
+			;;
+		esac
+	done
+}
+
+
+function DeleteBookmark {
+echo "--------------------------------------------------------------------------"
+		if ! test -s bookmarks;
+	then 
+	echo "You dont have any bookmarks!"
+	bookmarksMenu   
+fi
+echo "This is your list of bookmarks: 
+ID | NAME | URL | POP"
+cat bookmarks
+echo "Type id of bookmark you want to delete or type zero to get back"
+read idDeleted;
+
+
+
+if [ -z "$idDeleted" ];
+		then echo "You need to type an id or type zero to get back!"
+		bookmarksMenu
+	fi
+if   [ "$idDeleted" -eq "0" ]; 
+		then 
+		echo "You are  going back to menu"
+			bookmarksMenu
+	fi
+
+	if [ "$idDeleted" \> "$(wc -l < bookmarks)" ]
+		then
+		{
+			echo "You entered a wrong id, try again"
+			bookmarksMenu
+		}
+	fi
+
+#cat bookmarks | grep -v "$idDeleted"
+# СДЕЛАТЬ УДАЛЕНИ ПО ID, не по строке
+#awk -F'|' -v i=$idDeleted '{if($1 == i) $4=" "$4+1}1' OFS='|' bookmarks
+StringToDelete="$(awk -F'|' -v i=$idDeleted '{if($1 == i) print $0 }' OFS='|' bookmarks)"
+grep -v "$StringToDelete" bookmarks > tmp2 && mv tmp2 bookmarks
+AnotherDeleting
+}
+
+# counter
+
+
+## OPEN URL
+function OpenUrl {
+	echo "--------------------------------------------------------------------------"
+	echo "Type id of bookmark you want to open or type zero to get back: "
+	read idOpen
+	## НЕ РАБОТАЕТ БАААГ
+
+	if [ -z "$idOpen" ]
+		then 
+		echo "You need to type an id or type zero to get back!"
+		bookmarksMenu
+	fi
+	if  [ "$idOpen" -eq "0" ]
+		then 
+		echo "You are  going back to menu"
+			bookmarksMenu
+	fi
+
+	
+	NumberOfBookmarks="$(wc -l < bookmarks)"
+	
+	if (( $idOpen > $NumberOfBookmarks ));
+		then
+		{
+			echo "You entered a wrong id, try again"
+			bookmarksMenu
+		}
+	fi
+	#(tail -n +2 bookmarks) > subbookmarks
+	#echo "$id"
+	url="$(awk -F "|" -v i=$idOpen 'FNR == i { gsub (" ", "", $0); print $3}' bookmarks)"
+	 #echo "1: " | awk -F  "|" '/1/ {print $1}'
+	 #awk -v i=$id 'FNR == i {print $5}' subbookmarks
+#URL CONTROL
+
+	xdg-open "$url"
+
+	
+awk -F'|' -v i=$idOpen '{if($1 == i) $4=" "$4+1}1' OFS='|' bookmarks > tmp && mv tmp bookmarks
+#
+#counter="$(awk -v i=$idOpen  'BEGIN{FNqR == i}{$7+=1} END{ print $0}' bookmarks)#"
+#N=$idOpe#n
+#sed -i "#{N}s/.*/${counter}" bookmarks
+#(("$(awk -F "|" -v i=$idOpen 'FNR == i { gsub (" ", "", $0); print $4}' bookmarks)"+1)) | sed -i
+#( echo "$counter" | sed 's/}$/\\$(($counter+1))/' ) subbookmarks
+#sed  -i "s/$counter" subbookmarks
+#cut -d. -f$id subbookmarks
+#odlnum=`cut -d ',' -s -f7 subbookmarks`
+#newnum=`expr $oldnum + 1`
+#sed -i "s/${$id}/${$counter}/g" subbookmarks
+bookmarksMenu
+}
+
+	
+
+## SORT BOOKMARKS BY NAME
+
+function SortBookmarkByName {
+	echo "--------------------------------------------------------------------------"
+	
+	#(tail -n +2 bookmarks) > subbookmarks
+	cp bookmarks  tmp
+		if ! test -s tmp;
+	then 
+	echo "You dont have any bookmarks!"
+	bookmarksMenu   
+fi
+echo "This is your list of bookmarks sorted by name: 
+ID | NAME | URL | POP "
+
+	cat tmp | sort -t "|" -k2
+	OpenUrl
+}
+
+
+
+function SortBookmarkByPop {
+	echo "--------------------------------------------------------------------------"
+
+	#(tail -n +2 bookmarks) > subbookmarks
+	cp  bookmarks  tmp
+
+	if ! test -s tmp;
+	then 
+	echo "You dont have any bookmarks!"
+	bookmarksMenu   
+fi
+
+		echo "This is your list of bookmarks sorted by popularity: 
+ID | NAME | URL | POP "
+
+	cat tmp | sort -r -t "|" -k4 
+	OpenUrl
+}
+
+
+
+
+## MAIN MENU
+
+function bookmarksMenu {
+echo "--------------------------------------------------------------------------"
+echo "Choose what do you want to do: "
+options2=(
+"Create a new bookmark"
+"Delete bookmark"
+"Sort bookmarks by name"
+"Sort bookmarks by popularity"
+"Import bookmark"
+"Quit"
+);
+
+select opt1 in "${options2[@]}"
+	do
+		case $opt1 in 
+			"Create a new bookmark")
+				CreateBookmark
+				break
+				;;
+			"Delete bookmark")
+				DeleteBookmark
+				break
+				;;
+			"Sort bookmarks by name")
+				SortBookmarkByName
+				break
+				;;
+			"Sort bookmarks by popularity")
+				SortBookmarkByPop
+				break
+				;;
+			"Import bookmark")
+				$ImportBookmark
+				break
+				;;
+			"Quit")
+				exit
+				;;
+			*) 
+			echo "You need to choose something!"
+
+			bookmarksMenu
+			;;
+
+		esac
+	done
+}
+
+
+
+
+
+## TEST FILES
+
+if  test -s bookmarks; 
+then bookmarksMenu
+else echo "File does not exist or its empty! Please control directory. Do you want to change directory or create a new database?"; 
+options1=("Change" "Create" "Quit"); 
+select opt in "${options1[@]}"
+	do
+		case $opt in
+			"Change")
+				echo "Now you are in : "
+				pwd
+				break
+				;;
+			"Create")
+				
+				touch bookmarks
+				#echo "id | name | url | opens" >> bookmarks
+				bookmarksMenu
+				break
+				;;
+			"Quit")
+				exit
+				;;
+			*) echo invalid option;;
+		esac;
+	done
+fi 	
+
+
