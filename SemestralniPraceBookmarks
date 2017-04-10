@@ -14,16 +14,8 @@ read name
 echo  "Please enter url of bookmark: "
 read url
 		regex='^(https?|ftp|file)://[-A-Za-z0-9\+&@#/%?=~_|!:,.;]*[-‌​A-Za-z0-9\+&@#/%=~_|‌​]$'
-		if [[ $url =~ $regex ]]
+		if ! [[ $url =~ $regex ]]
 			then
-				let lastid="$(awk 'END { print $1}' bookmarks)"
-				id="$(($lastid+1))"
-				let opens=0
-				echo "$id | $name | $url | $opens " >> bookmarks
-				echo "--------------------------------------------------------------------------"
-				echo "Bookmark was added!"
-				bookmarksMenu
-			else
 				regex2='^[-A-Za-z0-9\+&@#/%?=~_|!:,.;]*[-‌​A-Za-z0-9\+&@#/%=~_|‌​]$'
 			
  fi
