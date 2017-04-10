@@ -16,7 +16,13 @@ read url
 		regex='^(https?|ftp|file)://[-A-Za-z0-9\+&@#/%?=~_|!:,.;]*[-‌​A-Za-z0-9\+&@#/%=~_|‌​]$'
 		if [[ $url =~ $regex ]]
 			then
-				break
+				let lastid="$(awk 'END { print $1}' bookmarks)"
+				id="$(($lastid+1))"
+				let opens=0
+				echo "$id | $name | $url | $opens " >> bookmarks
+				echo "--------------------------------------------------------------------------"
+				echo "Bookmark was added!"
+				bookmarksMenu
 			else
 				regex2='^[-A-Za-z0-9\+&@#/%?=~_|!:,.;]*[-‌​A-Za-z0-9\+&@#/%=~_|‌​]$'
 			
@@ -216,6 +222,11 @@ ID | NAME | URL | POP "
 }
 
 
+function ImportBookmark {
+	echo "Not ready yet!"
+	break
+}
+
 
 
 ## MAIN MENU
@@ -237,23 +248,23 @@ select opt1 in "${options2[@]}"
 		case $opt1 in 
 			"Create a new bookmark")
 				CreateBookmark
-				break
+				
 				;;
 			"Delete bookmark")
 				DeleteBookmark
-				break
+				
 				;;
 			"Sort bookmarks by name")
 				SortBookmarkByName
-				break
+				
 				;;
 			"Sort bookmarks by popularity")
 				SortBookmarkByPop
-				break
+				
 				;;
 			"Import bookmark")
-				$ImportBookmark
-				break
+				ImportBookmark
+				
 				;;
 			"Quit")
 				exit
@@ -291,7 +302,7 @@ select opt in "${options1[@]}"
 				touch bookmarks
 				#echo "id | name | url | opens" >> bookmarks
 				bookmarksMenu
-				break
+				
 				;;
 			"Quit")
 				exit
